@@ -67,3 +67,32 @@ class test_Place(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.amenity_ids), list)
+
+    def test_command_line_params(self):
+        """Test if Command line parameters are actually added"""
+        params = {'user_id': "16c216cf-9d55-4763-b730-974ac2642a1d",
+                  'city_id': "16c246cf-9d55-4763-b730-974ac2642a1d",
+                  'name': "Little house",
+                  'number_rooms': 4,
+                  'number_bathrooms': 2,
+                  'max_guest': 8,
+                  'price_by_night': 150000.00,
+                  'latitude': 37.773972,
+                  'longitude': -122.431297
+                  }
+        obj = self.value(**params)
+
+        self.assertEqual(obj.user_id, params['user_id'])
+        self.assertEqual(obj.city_id, params['city_id'])
+        self.assertEqual(obj.number_rooms, params['number_rooms'])
+        self.assertEqual(obj.number_bathrooms, params['number_bathrooms'])
+        self.assertEqual(obj.max_guest, params['max_guest'])
+        self.assertEqual(obj.price_by_night, params['price_by_night'])
+        self.assertEqual(obj.latitude, params['latitude'])
+        self.assertEqual(obj.longitude, params['longitude'])
+
+        # Test default values
+        new_dict = obj.to_dict()
+        self.assertEqual(obj.id, new_dict['id'])
+        self.assertEqual(obj.created_at.isoformat(), new_dict['created_at'])
+        self.assertEqual(obj.updated_at.isoformat(), new_dict['updated_at'])
