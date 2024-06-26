@@ -41,6 +41,9 @@ class test_fileStorage(unittest.TestCase):
         temp = storage.all()
         self.assertIsInstance(temp, dict)
 
+        all_basemodel = storage.all(BaseModel)
+        self.assertEqual(len(all_basemodel.keys()), 1)
+
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
         new = BaseModel()
@@ -107,3 +110,21 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+    def test_all_with_argument(self):
+        """__objects is properly returned when an argument is passed"""
+        new = BaseModel()
+
+        all_basemodel = storage.all(BaseModel)
+        self.assertEqual(len(all_basemodel.keys()), 1)
+
+    def test_delete(self):
+        """obj properly deleted"""
+        new = BaseModel()
+
+        all_basemodel = storage.all(BaseModel)
+        self.assertEqual(len(all_basemodel.keys()), 1)
+
+        storage.delete(new)
+        all_basemodel = storage.all(BaseModel)
+        self.assertEqual(len(all_basemodel.keys()), 0)
