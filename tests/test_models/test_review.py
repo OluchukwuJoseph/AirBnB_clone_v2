@@ -27,3 +27,21 @@ class test_review(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.text), str)
+
+    def test_command_line_params(self):
+        """Test if Command line parameters are actually added"""
+        params = {'place_id': "61c216cf-9d55-4765-b730-974ac2642a1d",
+                  'user_id': "16c216cf-9d55-4763-b730-974ac2642a1d",
+                  'text': "Nice place!"
+                  }
+        obj = self.value(**params)
+
+        self.assertEqual(obj.place_id, params['place_id'])
+        self.assertEqual(obj.user_id, params['user_id'])
+        self.assertEqual(obj.text, params['text'])
+
+        # Test default values
+        new_dict = obj.to_dict()
+        self.assertEqual(obj.id, new_dict['id'])
+        self.assertEqual(obj.created_at.isoformat(), new_dict['created_at'])
+        self.assertEqual(obj.updated_at.isoformat(), new_dict['updated_at'])

@@ -22,3 +22,19 @@ class test_City(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.name), str)
+
+    def test_command_line_params(self):
+        """Test if Command line parameters are actually added"""
+        params = {'state_id': "16c216cf-9f55-4763-b730-974ac2642a1d",
+                  'name': "Lagos Island"
+                  }
+        obj = self.value(**params)
+
+        self.assertEqual(obj.state_id, params['state_id'])
+        self.assertEqual(obj.name, params['name'])
+
+        # Test default values
+        new_dict = obj.to_dict()
+        self.assertEqual(obj.id, new_dict['id'])
+        self.assertEqual(obj.created_at.isoformat(), new_dict['created_at'])
+        self.assertEqual(obj.updated_at.isoformat(), new_dict['updated_at'])

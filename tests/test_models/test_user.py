@@ -32,3 +32,22 @@ class test_User(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.password), str)
+
+    def test_command_line_params(self):
+        """Test if Command line parameters are actually added"""
+        params = {'first_name': "Joseph",
+                  'last_name': "Oluchukwu",
+                  'password': "user_pwd",
+                  'email': "user@gmail.com"
+                  }
+        obj = self.value(**params)
+
+        self.assertEqual(obj.first_name, params['first_name'])
+        self.assertEqual(obj.last_name, params['last_name'])
+        self.assertEqual(obj.password, params['password'])
+        self.assertEqual(obj.email, params['email'])
+        new_dict = obj.to_dict()
+        # Test default values
+        self.assertEqual(obj.id, new_dict['id'])
+        self.assertEqual(obj.created_at.isoformat(), new_dict['created_at'])
+        self.assertEqual(obj.updated_at.isoformat(), new_dict['updated_at'])

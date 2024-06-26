@@ -17,3 +17,16 @@ class test_Amenity(test_basemodel):
         """ """
         new = self.value()
         self.assertEqual(type(new.name), str)
+
+    def test_command_line_params(self):
+        """Test if Command line parameters are actually added"""
+        params = {'name': "Internet"}
+        obj = self.value(**params)
+
+        self.assertEqual(obj.name, params['name'])
+
+        # Test default values
+        new_dict = obj.to_dict()
+        self.assertEqual(obj.id, new_dict['id'])
+        self.assertEqual(obj.created_at.isoformat(), new_dict['created_at'])
+        self.assertEqual(obj.updated_at.isoformat(), new_dict['updated_at'])
