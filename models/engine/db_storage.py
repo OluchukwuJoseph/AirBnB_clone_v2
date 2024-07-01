@@ -19,11 +19,12 @@ class DBStorage:
         """Initializes the Instance"""
         DB_USER = os.getenv('HBNB_MYSQL_USER')
         DB_PWD = os.getenv('HBNB_MYSQL_PWD')
-        DB_HOST = os.getenv('HBNB_MYSQL_HOST')
+        HOST = os.getenv('HBNB_MYSQL_HOST')
         DB = os.getenv('HBNB_MYSQL_DB')
 
-        DBStorage.__engine = create_engine(f"mysql+mysqldb://{DB_USER}:\
-                                {DB_PWD}@{DB_HOST}/{DB}", pool_pre_ping=True)
+        DBStorage.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}"
+                                           .format(DB_USER, DB_PWD, HOST, DB),
+                                           pool_pre_ping=True)
 
         if os.getenv('HBNB_ENV') == 'test':
             from sqlalchemy import MetaData
@@ -52,7 +53,7 @@ class DBStorage:
             if cls in classes:
                 all_items = DBStorage.__session.query(cls).all()
             for item in all_items:
-                key = f"{item.__class__.__name}.{item.id}"
+                key = f"{item.__class__.__name__}.{item.id}"
                 dictionary.update({key: item})
             return dictionary
 
