@@ -4,6 +4,7 @@ import os
 import sys
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
@@ -22,6 +23,9 @@ class User(BaseModel, Base):
         last_name = Column(String(128), nullable=False)
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
+
+        places = relationship('Place', back_populates='user',
+                              cascade='all, delete-orphan')
     else:
         # If not Storage Type was specified return error
         sys.stderr.write('Unkwown FILE_TYPE_STORAGE\n')
