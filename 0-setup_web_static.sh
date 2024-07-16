@@ -10,8 +10,8 @@ fi
 
 # Create necessary files and directories
 sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared
-sudo mkdir -p /data/web_static/current
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/current/
 
 echo -e "<html>
     <head>
