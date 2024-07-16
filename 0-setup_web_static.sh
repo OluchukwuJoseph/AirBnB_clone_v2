@@ -11,7 +11,6 @@ fi
 # Create necessary files and directories
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
-sudo mkdir -p /data/web_static/current/
 
 echo -e "<html>
     <head>
@@ -21,15 +20,13 @@ echo -e "<html>
     </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
 
-for file in /data/web_static/current/*
-do
-    if [ -L "$file" ]
-    then
-	    rm /data/web_static/current/*
-    fi
-done
 
-sudo ln -s /data/web_static/releases/test/* /data/web_static/current
+if [ -L /data/web_static/current ]
+then
+    rm /data/web_static/current
+fi
+
+sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
 sudo chown -R ubuntu:ubuntu /data
 
