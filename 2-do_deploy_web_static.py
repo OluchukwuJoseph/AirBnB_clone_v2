@@ -6,7 +6,7 @@ import os
 
 env.use_ssh_config = True
 env.key_filename = '~/.ssh/school'
-env.hosts = ['54.152.97.27']#, '52.91.127.178']
+env.hosts = ['54.152.97.27', '52.91.127.178']
 env.user = 'ubuntu'
 
 
@@ -24,15 +24,16 @@ def do_pack():
     else:
         return None
 
+
 def do_deploy(archive_path):
     """This function distributes an archive to my web servers"""
     # Check if archive file exists
-    if not os.path.exists(f"./{archive_path}"):
+    if not os.path.exists(archive_path):
         return False
 
     # Upload archive file on server and uncompress it
     try:
-        put(f'{archive_path}', '/tmp/', True)
+        put(f'{archive_path}', '/tmp/')
         archive_name = archive_path.split('/')[-1]
         archive_name = archive_name.split('.')[0]
 
@@ -40,16 +41,18 @@ def do_deploy(archive_path):
         run(f"tar -xvzf /tmp/{archive_name}.tgz -C\
              /data/web_static/releases/{archive_name}")
 
-        # Delete archive from server and create new symbolic link to new release
-        run(f"rm -r /tmp/{archive_name}.tgz", True)
-
-        run("stat /data/web_static/current > /dev/null 2>&1 &&\
-            [ -L /data/web_static/current ] && rm /data/web_static/current\
-            || echo ''")
-        run(f"ln -s /data/web_static/releases/{archive_name}\
-             /data/web_static/current")
+        # Delete archive from server and create a symbolic link to new release
         run(f"mv /data/web_static/releases/{archive_name}/web_static/*\
             /data/web_static/releases/{archive_name}")
+
+        run(f"rm -rf /data/web_static/releases/{archive_name}/web_static")
+
+        run(f"rm /tmp/{archive_name}.tgz")
+
+        run("rm -rf /data/web_static/current")
+
+        run(f"ln -s /data/web_static/releases/{archive_name}\
+             /data/web_static/current")
 
         return True
     except Exception as e:
