@@ -4,35 +4,17 @@ from fabric.api import run, put, env
 import os
 
 
-env.use_ssh_config = True
 env.key_filename = '~/.ssh/school'
 env.hosts = ['54.152.97.27', '52.91.127.178']
 env.user = 'ubuntu'
 
 
-def do_pack():
-    """This function generates a .tgz archive from web_static contents"""
-    # Create /versions directory, if it doesn't exist
-    local("mkdir -p versions/")
-
-    # Generate archive name and create archive
-    archive_name = f"web_static_{datetime.now().strftime('%Y%m%d%H%M%S')}.tgz"
-    archive = local(f"tar -czvf versions/{archive_name} web_static")
-
-    if archive.succeeded:
-        return f"versions/{archive_name}"
-    else:
-        return None
-
-
 def do_deploy(archive_path):
     """Distributes an archive to my web servers"""
-
-    # Check archive_path exist
-    if not os.path.exists(archive_path):
-        return False
-
     try:
+        # Check archive_path exist
+        if not os.path.exists(archive_path):
+            return False
         archived_file = archive_path[9:]
 
         # Without the extension.
@@ -52,14 +34,14 @@ def do_deploy(archive_path):
         run("mkdir -p {}".format(file_dir))
 
         run(
-                "tar -xvf {} -C {}".format(
+                "sudo tar -xvf {} -C {}".format(
                     archived_file,
                     file_dir
                     )
                 )
 
         # Remove the archived file
-        run("rm {}".format(archived_file))
+        run("sudo rm {}".format(archived_file))
 
         run("mv {}web_static/* {}".format(file_dir, file_dir))
 
