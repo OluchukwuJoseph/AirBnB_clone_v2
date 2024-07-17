@@ -9,6 +9,21 @@ env.hosts = ['54.152.97.27', '52.91.127.178']
 env.user = 'ubuntu'
 
 
+def do_pack():
+    """This function generates a .tgz archive from web_static contents"""
+    # Create /versions directory, if it doesn't exist
+    local("mkdir -p versions/")
+
+    # Generate archive name and create archive
+    archive_name = f"web_static_{datetime.now().strftime('%Y%m%d%H%M%S')}.tgz"
+    archive = local(f"tar -czvf versions/{archive_name} web_static")
+
+    if archive.succeeded:
+        return f"versions/{archive_name}"
+    else:
+        return None
+
+
 def do_deploy(archive_path):
     """Distributes an archive to my web servers"""
     try:
@@ -54,7 +69,15 @@ def do_deploy(archive_path):
 
         print("New version deployed!")
 
+        return True
     except Exception as e:
         return False
 
-    return True
+
+def deploy():
+    """This function creates and distributes an archive to your web servers"""
+    archive_path = do_pack()
+
+    deployed = do_deploy(archive_path)
+
+    return deployed
