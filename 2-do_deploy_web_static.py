@@ -26,35 +26,52 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """This function distributes an archive to my web servers"""
-    # Check if archive file exists
+    """Distributes an archive to my web servers"""
+
+    # Check archive_path exist
     if not os.path.exists(archive_path):
         return False
 
-    # Upload archive file on server and uncompress it
     try:
-        put(f'{archive_path}', '/tmp/')
-        archive_name = archive_path.split('/')[-1]
-        archive_name = archive_name.split('.')[0]
+        archived_file = archive_path[9:]
 
-        run(f"mkdir -p /data/web_static/releases/{archive_name}/")
-        run(f"tar -xzf /tmp/{archive_name}.tgz -C\
-            /data/web_static/releases/{archive_name}/")
+        # Without the extension.
+        file_without_ext = archived_file[:-4]
 
-        # Delete archive from server and create a symbolic link to new release
-        run(f"rm /tmp/{archive_name}.tgz")
+        # Full path without the extension of the file
+        file_dir = "/data/web_static/releases/{}/".format(
+                file_without_ext)
 
-        run(f"mv /data/web_static/releases/{archive_name}/web_static/*\
-            /data/web_static/releases/{archive_name}")
+        # Retrive the file name
+        archived_file = "/tmp/" + archive_path[9:]
 
-        run(f"rm -rf /data/web_static/releases/{archive_name}/web_static")
+        # Upload to /tmp/ directory of the server
+        put(archive_path, "/tmp/")
 
-        run("rm -rf /data/web_static/current")
+        # Create the directory & Uncompress the file
+        run("mkdir -p {}".format(file_dir))
 
-        run(f"ln -s /data/web_static/releases/{archive_name}/\
-             /data/web_static/current")
+        run(
+                "tar -xvf {} -C {}".format(
+                    archived_file,
+                    file_dir
+                    )
+                )
 
-        print('New version deployed!')
+        # Remove the archived file
+        run("rm {}".format(archived_file))
+
+        run("mv {}web_static/* {}".format(file_dir, file_dir))
+
+        run("rm -rf {}web_static".format(file_dir))
+
+        run("rm -rf {}".format("/data/web_static/current"))
+
+        # Create symbolic link
+        run("ln -s {} /data/web_static/current".format(file_dir))
+
+        print("New version deployed!")
+
         return True
     except Exception as e:
         return False
