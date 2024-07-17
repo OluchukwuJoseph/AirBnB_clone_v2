@@ -12,49 +12,42 @@ env.user = 'ubuntu'
 def do_deploy(archive_path):
     """Distributes an archive to my web servers"""
     try:
-        # Check archive_path exist
-        if not os.path.exists(archive_path):
+        if not (path.exists(archive_path)):
             return False
-        archived_file = archive_path[9:]
 
-        # Without the extension.
-        file_without_ext = archived_file[:-4]
+        # upload web_static archive
+        put(archive_path, '/tmp/')
 
-        # Full path without the extension of the file
-        file_dir = "/data/web_static/releases/{}/".format(
-                file_without_ext)
+        # create target dir
+        timestamp = archive_path[-18:-4]
+        run('sudo mkdir -p /data/web_static/\
+            releases/web_static_{}/'.format(timestamp))
 
-        # Retrive the file name
-        archived_file = "/tmp/" + archive_path[9:]
+        # uncompress archive and delete .tgz
+        run('sudo tar -xzf /tmp/web_static_{}.tgz -C \
+            /data/web_static/releases/web_static_{}/'
+            .format(timestamp, timestamp))
 
-        # Upload to /tmp/ directory of the server
-        put(archive_path, "/tmp/")
+        # remove archive
+        run('sudo rm /tmp/web_static_{}.tgz'.format(timestamp))
 
-        # Create the directory & Uncompress the file
-        run("sudo mkdir -p {}".format(file_dir))
+        # move contents into host web_static
+        run('sudo mv /data/web_static/releases/web_static_{}/web_static/* \
+            /data/web_static/releases/web_static_{}/'
+            .format(timestamp, timestamp))
 
-        run(
-                "sudo tar -xvf {} -C {}".format(
-                    archived_file,
-                    file_dir
-                    )
-                )
+        run('sudo rm -rf /data/web_static/releases/\
+            web_static_{}/web_static'
+            .format(timestamp))
 
-        # Remove the archived file
-        run("sudo rm {}".format(archived_file))
+        # delete pre-existing symbolic link
+        run('sudo rm -rf /data/web_static/current')
 
-        run("sudo mv {}web_static/* {}".format(file_dir, file_dir))
-
-        run("sudo rm -rf {}web_static".format(file_dir))
-
-        run("sudo rm -rf {}".format("/data/web_static/current"))
-
-        # Create symbolic link
-        run("sudo ln -s {} /data/web_static/current".format(file_dir))
-
-        print("New version deployed!")
-
+        # re-establish symbolic link
+        run('sudo ln -s /data/web_static/releases/\
+            web_static_{}/ /data/web_static/current'.format(timestamp))
     except Exception as e:
         return False
 
+    # return True on success
     return True
