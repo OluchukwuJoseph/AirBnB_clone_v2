@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """This script deletes out-of-date archives, using the function do_clean"""
-from fabric.api import run, local, env
+from fabric.api import run, local, env, cd
 import os
-
 
 env.hosts = ['54.152.97.27', '52.91.127.178']
 env.user = 'ubuntu'
@@ -22,11 +21,11 @@ def do_clean(number=0):
         deleted += 1
 
     with cd('/data/web_static/releases/'):
-        server_archives = run('ls -tr')
-        server_archives = [for item in server_archives
+        archives = run('ls')
+        archives = [item for item in sorted(archives.stdout.split(' '))
                            if item.startswith('web_static_')]
 
         deleted = 0
-        while (deleted < (len(server_archives) - number)):
-            run(f"rm server_archives[deleted]}")
+        while (deleted < (len(archives) - number)):
+            run(f"rm -rf {archives[deleted]}")
             deleted += 1

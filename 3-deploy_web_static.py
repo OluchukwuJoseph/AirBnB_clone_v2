@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 """This script distributes an archive to my web servers"""
-from fabric.api import *
-import os
+from fabric.api import env, put, local, run
+from os import path
+from datetime import datetime
 
 
-env.key_filename = '~/.ssh/school'
 env.hosts = ['54.152.97.27', '52.91.127.178']
 env.user = 'ubuntu'
+env.key_filename = '~/.ssh/school'
 
 
 def do_pack():
@@ -35,11 +36,11 @@ def do_deploy(archive_path):
 
         # create target dir
         timestamp = archive_path[-18:-4]
-        run('sudo mkdir -p /data/web_static/\
-            releases/web_static_{}/'.format(timestamp))
+        run('sudo mkdir -p /data/web_static/releases/web_static_{}/'
+            .format(timestamp))
 
         # uncompress archive and delete .tgz
-        run('sudo tar -xzf /tmp/web_static_{}.tgz -C \
+        run('sudo tar -xzf /tmp/web_static_{}.tgz -C\
             /data/web_static/releases/web_static_{}/'
             .format(timestamp, timestamp))
 
@@ -51,16 +52,15 @@ def do_deploy(archive_path):
             /data/web_static/releases/web_static_{}/'
             .format(timestamp, timestamp))
 
-        run('sudo rm -rf /data/web_static/releases/\
-            web_static_{}/web_static'
+        run('sudo rm -rf /data/web_static/releases/web_static_{}/web_static'
             .format(timestamp))
 
         # delete pre-existing symbolic link
         run('sudo rm -rf /data/web_static/current')
 
         # re-establish symbolic link
-        run('sudo ln -s /data/web_static/releases/\
-            web_static_{}/ /data/web_static/current'.format(timestamp))
+        run('sudo ln -s /data/web_static/releases/web_static_{}/\
+            /data/web_static/current'.format(timestamp))
 
     except Exception as e:
         return False
