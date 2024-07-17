@@ -37,23 +37,24 @@ def do_deploy(archive_path):
         archive_name = archive_path.split('/')[-1]
         archive_name = archive_name.split('.')[0]
 
-        run(f"mkdir -p /data/web_static/releases/{archive_name}")
-        run(f"tar -xvzf /tmp/{archive_name}.tgz -C\
-             /data/web_static/releases/{archive_name}")
+        run(f"mkdir -p /data/web_static/releases/{archive_name}/")
+        run(f"tar -xzf /tmp/{archive_name}.tgz -C\
+            /data/web_static/releases/{archive_name}/")
 
         # Delete archive from server and create a symbolic link to new release
+        run(f"rm /tmp/{archive_name}.tgz")
+
         run(f"mv /data/web_static/releases/{archive_name}/web_static/*\
             /data/web_static/releases/{archive_name}")
 
         run(f"rm -rf /data/web_static/releases/{archive_name}/web_static")
 
-        run(f"rm /tmp/{archive_name}.tgz")
-
         run("rm -rf /data/web_static/current")
 
-        run(f"ln -s /data/web_static/releases/{archive_name}\
+        run(f"ln -s /data/web_static/releases/{archive_name}/\
              /data/web_static/current")
 
+        print('New version deployed!')
         return True
     except Exception as e:
         return False
