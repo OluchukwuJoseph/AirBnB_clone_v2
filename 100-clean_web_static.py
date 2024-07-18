@@ -23,7 +23,7 @@ def do_clean(number=0):
     with cd('/data/web_static/releases/'):
         archives = run('ls')
         archives = [item for item in sorted(archives.stdout.split(' '))
-                           if item.startswith('web_static_')]
+                    if item.startswith('web_static_')]
 
         deleted = 0
         while (deleted < (len(archives) - number)):
