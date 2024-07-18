@@ -9,6 +9,7 @@ env.key_filename = "~/.ssh/school"
 
 
 def do_clean(number=0):
+    """This function deletes out-of-date archives"""
     if number == 0:
         number = 1
     else:
