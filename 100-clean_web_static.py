@@ -17,7 +17,7 @@ def do_clean(number=0):
     local_archives = sorted(os.listdir("versions"))
     deleted = 0
     while (deleted < (len(local_archives) - number)):
-        local(f"rm versions/{local_archives[deleted]}")
+        local(f"rm ./versions/{local_archives[deleted]}")
         deleted += 1
 
     with cd('/data/web_static/releases/'):
@@ -27,5 +27,5 @@ def do_clean(number=0):
 
         deleted = 0
         while (deleted < (len(archives) - number)):
-            run(f"rm -rf {archives[deleted]}")
+            run(f"rm -rf ./{archives[deleted]}")
             deleted += 1
