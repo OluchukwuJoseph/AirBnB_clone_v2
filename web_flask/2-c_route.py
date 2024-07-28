@@ -14,10 +14,17 @@ def home():
     return "Hello HBNB!"
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
     """This function is executed when /hbnb route is queryed"""
     return "HBNB"
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def c_text(text):
+    """This function is executed when /c/<text> route is queryed"""
+    formatted_text = text.replace('_', ' ')
+    return f"C {formatted_text}"
 
 
 if __name__ == '__main__':
