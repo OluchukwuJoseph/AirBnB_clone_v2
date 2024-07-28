@@ -45,7 +45,7 @@ class DBStorage:
             for model_class in classes:
                 all_items = DBStorage.__session.query(model_class).all()
                 for item in all_items:
-                    key = f"{item.__class__.__name}.{item.id}"
+                    key = f"{item.__class__.__name__}.{item.id}"
                     dictionary.update({key: item})
 
             return dictionary

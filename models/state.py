@@ -3,8 +3,6 @@
 import os
 import sys
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
@@ -32,6 +30,9 @@ class State(BaseModel, Base):
 
     # DB storage will be used
     elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        from sqlalchemy import Column, String
+        from sqlalchemy.orm import relationship
+
         __tablename__ = "states"
 
         name = Column(String(128), nullable=False)

@@ -142,6 +142,7 @@ class HBNBCommand(cmd.Cmd):
                     new_dict.update({attribute_name: float(attribute_value)})
                 else:
                     new_dict.update({attribute_name: int(attribute_value)})
+        print(new_dict)
         new_instance = HBNBCommand.classes[args[0]](**new_dict)
         print(new_instance.id)
         storage.save()
@@ -175,7 +176,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            print(storage.all()[key])
         except KeyError:
             print("** no instance found **")
 

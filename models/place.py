@@ -2,12 +2,12 @@
 """ Place Module for HBNB project """
 import os
 import sys
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Place(BaseModel):
+class Place(Base, BaseModel):
     """ A place to stay """
     if os.getenv('HBNB_TYPE_STORAGE') == 'file':
         # File storage will be used
@@ -24,7 +24,7 @@ class Place(BaseModel):
         amenity_ids = []
     elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
         # DB storage will be used
-        __tabalename__ = 'places'
+        __tablename__ = 'places'
 
         city_id = Column(String(60), ForeignKey('cities.id'))
         user_id = Column(String(60), ForeignKey('users.id'))
