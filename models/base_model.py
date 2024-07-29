@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
 import os
-import sys
 import uuid
 from datetime import datetime
 from sqlalchemy.orm import declarative_base
@@ -11,11 +10,8 @@ from sqlalchemy import Column, String, DateTime
 # Determine Storage type and declare Base
 if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     Base = declarative_base()
-elif os.getenv('HBNB_TYPE_STORAGE') == 'file':
-    Base = object
 else:
-    sys.stderr.write('Unkwown FILE_TYPE_STORAGE\n')
-    sys.exit(1)
+    Base = object
 
 
 class BaseModel:

@@ -7,7 +7,7 @@ from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Place(Base, BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         # DB storage will be used
