@@ -142,7 +142,6 @@ class HBNBCommand(cmd.Cmd):
                     new_dict.update({attribute_name: float(attribute_value)})
                 else:
                     new_dict.update({attribute_name: int(attribute_value)})
-        print(new_dict)
         new_instance = HBNBCommand.classes[args[0]](**new_dict)
         print(new_instance.id)
         storage.save()

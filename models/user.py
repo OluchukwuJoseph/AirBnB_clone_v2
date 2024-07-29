@@ -19,10 +19,10 @@ class User(BaseModel, Base):
         # DB storage will be used
         __tablename__ = 'users'
 
-        first_name = Column(String(128), nullable=False)
-        last_name = Column(String(128), nullable=False)
-        email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
+        first_name = Column(String(128), nullable=False, default="")
+        last_name = Column(String(128), nullable=False, default="")
+        email = Column(String(128), nullable=False, default="")
+        password = Column(String(128), nullable=False, default="")
 
         places = relationship('Place', back_populates='user',
                               cascade='all, delete-orphan')
