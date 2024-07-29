@@ -81,3 +81,7 @@ class DBStorage:
         # Create session
         Session = sessionmaker(bind=DBStorage.__engine, expire_on_commit=False)
         DBStorage.__session = scoped_session(Session)
+
+    def close(self):
+        """Forcefully reload Sessions"""
+        DBStorage.__session.remove()

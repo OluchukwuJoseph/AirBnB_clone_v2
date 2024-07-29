@@ -1,14 +1,24 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 import os
-import sys
 from models.base_model import BaseModel, Base
 
 
 class State(BaseModel, Base):
     """State class that represents the states table"""
-    # File storage will be used
-    if os.getenv('HBNB_TYPE_STORAGE') == 'file':
+    # DB storage will be used
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        from sqlalchemy import Column, String
+        from sqlalchemy.orm import relationship
+
+        __tablename__ = "states"
+
+        name = Column(String(128), nullable=False)
+
+        cities = relationship("City", back_populates="state",
+                              cascade="all, delete-orphan")
+    else:
+        # File storage will be used
         name = ""
 
         @property
@@ -27,19 +37,3 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     cities.append(city)
             return cities
-
-    # DB storage will be used
-    elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        from sqlalchemy import Column, String
-        from sqlalchemy.orm import relationship
-
-        __tablename__ = "states"
-
-        name = Column(String(128), nullable=False)
-
-        cities = relationship("City", back_populates="state",
-                              cascade="all, delete-orphan")
-    # If not Storage Type was specified return error
-    else:
-        sys.stderr.write('Unkwown FILE_TYPE_STORAGE\n')
-        sys.exit(1)

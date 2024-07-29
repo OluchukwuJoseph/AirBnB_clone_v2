@@ -9,20 +9,7 @@ from sqlalchemy.orm import relationship
 
 class Place(Base, BaseModel):
     """ A place to stay """
-    if os.getenv('HBNB_TYPE_STORAGE') == 'file':
-        # File storage will be used
-        city_id = ""
-        user_id = ""
-        name = ""
-        description = ""
-        number_rooms = 0
-        number_bathrooms = 0
-        max_guest = 0
-        price_by_night = 0
-        latitude = 0.0
-        longitude = 0.0
-        amenity_ids = []
-    elif os.getenv('HBNB_TYPE_STORAGE') == 'db':
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         # DB storage will be used
         __tablename__ = 'places'
 
@@ -40,6 +27,15 @@ class Place(Base, BaseModel):
         user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
     else:
-        # If not Storage Type was specified return error
-        sys.stderr.write('Unkwown FILE_TYPE_STORAGE\n')
-        sys.exit(1)
+        # File storage will be used
+        city_id = ""
+        user_id = ""
+        name = ""
+        description = ""
+        number_rooms = 0
+        number_bathrooms = 0
+        max_guest = 0
+        price_by_night = 0
+        latitude = 0.0
+        longitude = 0.0
+        amenity_ids = []
