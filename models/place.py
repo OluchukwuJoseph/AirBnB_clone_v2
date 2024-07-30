@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 import os
-import sys
-from models.base_model import Base, BaseModel
+from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -24,8 +23,8 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
 
-        user = relationship('User', back_populates='places')
         cities = relationship('City', back_populates='places')
+        user = relationship('User', back_populates='places')
     else:
         # File storage will be used
         city_id = ""
