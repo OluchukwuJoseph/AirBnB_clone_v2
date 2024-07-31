@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-This script starts a Flask web application with '/states_list' route
-"""
+"""This script starts a Flask web application with '/states_list' route"""
 from flask import Flask, render_template
 from models import storage
 from models import *
@@ -24,4 +22,4 @@ def app_teardown(self):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port="5000")
