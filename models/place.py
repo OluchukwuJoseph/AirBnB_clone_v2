@@ -2,8 +2,15 @@
 """ Place Module for HBNB project """
 import os
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
+
+
+place_amenity = Table('association', Base.metadata,
+                      Column('place_id', ForeignKey('places.id'),
+                             primary_key=True),
+                      Column('amenity_id', ForeignKey('amenities.id'),
+                             primary_key=True))
 
 
 class Place(BaseModel, Base):
@@ -27,6 +34,9 @@ class Place(BaseModel, Base):
         user = relationship('User', back_populates='places')
         reviews = relationship('Review', back_populates='place',
                                cascade='all, delete-orphan')
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates="place_amenities")
     else:
         # File storage will be used
         city_id = ""
