@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This script starts a Flask web application with /states_list route"""
+"""7-states_list module"""
 from flask import Flask, render_template
 from models import storage
 from models import *

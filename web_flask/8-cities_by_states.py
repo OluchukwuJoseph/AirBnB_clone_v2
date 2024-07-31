@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This script starts a Flask web application with /cities_by_states route"""
+"""8-cities_by_states module"""
 from flask import Flask, render_template
 from models import storage
 from models import *
