@@ -68,3 +68,19 @@ class Place(BaseModel, Base):
                     reviews.append(review)
 
             return reviews
+
+        @property
+        def amenities(self):
+            """
+                Returns the list of Amenity instances associated with Place.
+                It will be the FileStorage relationship between Place & Amenity
+            """
+            return Place.amenity_ids
+
+        @amenities.setter
+        def amenities(self, amenity_obj):
+            """
+                Adds an Amenity to a list of amenities that belongs to a Place.
+                It will be the FileStorage relationship between Place & Review
+            """
+            Place.amenity_ids.append(amenity_obj.id)
