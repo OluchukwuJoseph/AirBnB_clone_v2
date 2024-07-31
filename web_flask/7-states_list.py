@@ -4,7 +4,7 @@ This script starts a Flask web application with '/states_list' route
 """
 from flask import Flask, render_template
 from models import storage
-from models.state import State
+from models import *
 
 app = Flask(__name__)
 

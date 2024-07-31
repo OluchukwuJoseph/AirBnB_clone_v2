@@ -17,7 +17,7 @@ class City(BaseModel, Base):
         state_id = Column(String(60), ForeignKey('states.id'))
 
         state = relationship("State", back_populates="cities")
-        places = relationship("Place", back_populates="cities",
+        places = relationship("Place", backref="cities",
                               cascade="all, delete-orphan")
     else:
         # File storage will be used
