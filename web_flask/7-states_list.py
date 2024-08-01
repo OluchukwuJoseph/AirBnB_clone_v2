@@ -10,9 +10,9 @@ app = Flask(__name__)
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """states_list: display a HTML page: (inside the tag BODY)"""
-    state_obj = storage.all(State)
+    states = storage.all(State)
 
-    return render_template('7-states_list.html', state_obj=state_obj)
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
