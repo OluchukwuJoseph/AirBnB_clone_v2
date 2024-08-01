@@ -9,17 +9,17 @@ app = Flask(__name__)
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
-    """This function will be executed when /states_list is queryed"""
-    states = storage.all(State)
+    """states_list: display a HTML page: (inside the tag BODY)"""
+    state_obj = storage.all(State)
 
-    return render_template('7-states_list.html', states=states)
+    return render_template('7-states_list.html', state_obj=state_obj)
 
 
 @app.teardown_appcontext
-def app_teardown(self):
-    """Method to remove current SQLAlchemy Session"""
+def teardown_db(exception):
+    """To remove the current SQLAlchemy Session"""
     storage.close()
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host='0.0.0.0', port='5000')

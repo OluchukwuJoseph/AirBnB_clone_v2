@@ -13,6 +13,7 @@
                 <H1>States</H1>
             {% endif %}
             {% if cities %}
+                <H3>Cities:</H3>
                 <UL>
                     {% for city in cities | sort(attribute='name')%}
                         <LI>City: {{ city.id }}: <B>{{ city.name }}</B></LI>
